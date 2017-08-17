@@ -49,26 +49,31 @@
             android:onClick="playStart"
             android:text="@string/start"
             style="@android:style/Widget.Button.Toggle" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="playStop"
             android:text="@string/stop"
             style="@android:style/Widget.Button.Toggle"
-            android:layout_weight="0.15"
             android:elevation="0dp" />
+
+        <Button
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete"
+            android:onClick="deleteFile"
+            style="@android:style/Widget.Button.Toggle" />
     </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:autoLink="web"
-        android:text="test"
-        android:textStyle="bold" />
-
-    <kz.example.timur.screenrecorder.VisualizerView
-        android:id="@+id/myvisualizerview"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:weightSum="1">
 
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/listView"></ListView>
+    </LinearLayout>
 </LinearLayout>
