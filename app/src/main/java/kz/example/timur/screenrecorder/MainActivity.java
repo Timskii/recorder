@@ -17,13 +17,15 @@ public class MainActivity extends Activity {
     private MediaRecorder mediaRecorder;
     private MediaPlayer mediaPlayer;
     private String fileName;
+    private String filepath;
     ArrayList<File> files;
     ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        filepath = Environment.getExternalStorageDirectory() + "/Records";
+        new File(filepath).mkdir();
         listView = (ListView)findViewById(R.id.listView);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         refreshList();
@@ -31,7 +33,7 @@ public class MainActivity extends Activity {
 
     public void recordStart(View v) {
         java.sql.Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        fileName = Environment.getExternalStorageDirectory() + "/Record_"+ timestamp.getTime() + ".mp4";
+        fileName = filepath + "/Record_"+ timestamp.getTime() + ".mp4";
 
         try {
             releaseRecorder();
@@ -65,9 +67,12 @@ public class MainActivity extends Activity {
         try {
             releasePlayer();
             mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(Environment.getExternalStorageDirectory() + "/" + files.get(listView.getCheckedItemPosition()).getName());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
+
+            if ( listView.getCheckedItemPosition() != -1){
+                mediaPlayer.setDataSource(filepath + "/" + files.get(listView.getCheckedItemPosition()).getName());
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,12 +106,16 @@ public class MainActivity extends Activity {
     }
 
     public void deleteFile(View v){
-        files.get(listView.getCheckedItemPosition()).delete();
+        System.out.println(listView.getCheckedItemPosition());
+        if ( listView.getCheckedItemPosition() != -1) {
+            files.get(listView.getCheckedItemPosition()).delete();
+        }
         refreshList();
     }
     private void refreshList(){
         files = new ArrayList<File>();
-        for (File file : Environment.getExternalStorageDirectory().listFiles()) {
+        File file1 = new File(filepath);
+        for (File file : file1.listFiles()) {
             if (file.getName().contains("Record") == true && file.getName().contains(".mp4") == true)
                 files.add(file);
         }
